@@ -13,7 +13,15 @@ var repository = posicionGPSModel.repository;
 function create(latitud, longitud) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield repository.create({ latitud: latitud, longitud: longitud });
+            //Si existe una posicion GPS con esa latitud y longitud la devuelve, en caso contrario la crea
+            let posicionGPS = yield repository.findOne({ latitud: latitud, longitud: longitud }).exec();
+            if (posicionGPS == null) {
+                posicionGPS = yield repository.create({ latitud: latitud, longitud: longitud });
+            }
+            else {
+                console.log('Se reutiliza posicionGPS con ID ' + posicionGPS._id);
+            }
+            return posicionGPS;
         }
         catch (error) {
             console.log('No se pudo crear una posicion en el repositorio');

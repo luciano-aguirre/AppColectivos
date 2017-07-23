@@ -5,13 +5,13 @@ import paradaColectivoModel = require('./paradaColectivoModel');
 import IParadaColectivo = paradaColectivoModel.IParadaColectivo;
 
 export var lineaColectivoSchema = new mongoose.Schema({
-    linea: Number,
+    linea: String,
     paradas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PosicionGPS' }],
     cantidadParadas: Number
 });
 
 export interface ILineaColectivo extends mongoose.Document {
-    linea: Number,
+    linea: String,
     paradas: [mongoose.Types.ObjectId],
     cantidadParadas: Number
 }

@@ -17,15 +17,14 @@ export async function obtenerLineasColectivo(req: express.Request, res: express.
     }
 }
 
-export async function cargarLineaColectivo(req: express.Request, res: express.Response) {
-
-    let linea: number = req.params.linea;
+export async function cargarLineasColectivo(req: express.Request, res: express.Response) {
+    
     try {
-        await lineaColectivoService.cargarLineaColectivo(linea);
-        res.status(200).send('Se cargaron las paradas de la linea ' + linea);
+        await lineaColectivoService.cargarLineasColectivo();
+        res.status(200).send('Se cargaron todas las lineas de colectivo');
 
     } catch (error) {
-        res.status(400).send('Error al cargar las paradas de la linea ' + linea);
+        res.status(400).send('Error al cargar las lineas de colectivo');
     }
 }
 

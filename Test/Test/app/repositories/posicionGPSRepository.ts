@@ -7,7 +7,15 @@ import repository = posicionGPSModel.repository;
 
 export async function create(latitud: number, longitud: number): Promise<IPosicionGPS> {
     try {
-        return await repository.create({ latitud: latitud, longitud: longitud });
+        //Si existe una posicion GPS con esa latitud y longitud la devuelve, en caso contrario la crea
+        let posicionGPS: IPosicionGPS = await repository.findOne({ latitud: latitud, longitud: longitud }).exec();
+        if (posicionGPS == null) {
+            posicionGPS = await repository.create({ latitud: latitud, longitud: longitud });
+        }
+        else {
+            console.log('Se reutiliza posicionGPS con ID ' + posicionGPS._id);
+        }
+        return posicionGPS;
     } catch (error) {
         console.log('No se pudo crear una posicion en el repositorio');
         return null;

@@ -21,19 +21,18 @@ function obtenerLineasColectivo(req, res) {
     });
 }
 exports.obtenerLineasColectivo = obtenerLineasColectivo;
-function cargarLineaColectivo(req, res) {
+function cargarLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let linea = req.params.linea;
         try {
-            yield lineaColectivoService.cargarLineaColectivo(linea);
-            res.status(200).send('Se cargaron las paradas de la linea ' + linea);
+            yield lineaColectivoService.cargarLineasColectivo();
+            res.status(200).send('Se cargaron todas las lineas de colectivo');
         }
         catch (error) {
-            res.status(400).send('Error al cargar las paradas de la linea ' + linea);
+            res.status(400).send('Error al cargar las lineas de colectivo');
         }
     });
 }
-exports.cargarLineaColectivo = cargarLineaColectivo;
+exports.cargarLineasColectivo = cargarLineasColectivo;
 function eliminarLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let resultado = yield lineaColectivoService.eliminarLineasColectivos();

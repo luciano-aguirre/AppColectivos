@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 exports.paradaColectivoSchema = new mongoose.Schema({
-    linea: Number,
+    linea: String,
     posicion_id: { type: mongoose.Schema.Types.ObjectId, ref: 'PosicionGPS' },
     sentido: String
 });

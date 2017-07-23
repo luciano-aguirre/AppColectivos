@@ -12,7 +12,15 @@ import ILineaColectivo = lineaColectivoModel.ILineaColectivo;
 
 import lineaColectivoRepository = require('../repositories/lineaColectivoRepository');
 
-export async function cargarLineaColectivo(linea: number) {
+export async function cargarLineasColectivo() {
+    let lineas: string[] = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
+    
+    lineas.forEach(async function (linea) {
+        await cargarLineaColectivo(linea);
+    });
+}
+
+async function cargarLineaColectivo(linea: string) {
     request(
         {
             method: 'GET',
@@ -22,7 +30,7 @@ export async function cargarLineaColectivo(linea: number) {
 
             try {
                 const dataJSON = JSON.parse(body);
-                let paradasJSON = dataJSON['result']['fArray'];//VER COMO TIPAR EL ARRAY
+                let paradasJSON = dataJSON['result']['fArray'];
                 let numeroParadas: number = 0;
                 let posLatitud: number = 6;
                 let posLongitud: number = 7;
@@ -32,7 +40,6 @@ export async function cargarLineaColectivo(linea: number) {
                 let nuevaParadaColectivo: IParadaColectivo;
 
                 while (posLatitud < paradasJSON.length && posLongitud < paradasJSON.length && posSentido < paradasJSON.length) {
-                    //VER POSIBLE ERROR SI PASARA
                     nuevaParadaColectivo = await paradaColectivoService.crearParadaColectivo(linea, paradasJSON[posLatitud]['fStr'], paradasJSON[posLongitud]['fStr'], paradasJSON[posSentido]['fStr']);
                     paradas.push(nuevaParadaColectivo._id);
                     ++numeroParadas;

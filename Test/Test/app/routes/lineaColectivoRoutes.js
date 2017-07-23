@@ -7,7 +7,7 @@ function obtenerLineasColectivo(req, res) {
 exports.obtenerLineasColectivo = obtenerLineasColectivo;
 ;
 function cargarLineaColectivo(req, res) {
-    controller.cargarLineaColectivo(req, res);
+    controller.cargarLineasColectivo(req, res);
 }
 exports.cargarLineaColectivo = cargarLineaColectivo;
 ;

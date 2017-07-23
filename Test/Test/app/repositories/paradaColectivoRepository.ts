@@ -8,7 +8,7 @@ import IPosicionGPS = posicionGPSModel.IPosicionGPS;
 
 import repository = paradaColectivoModel.repository;
 
-export async function create(linea: number, posicionGPS: IPosicionGPS, sentido: string): Promise<IParadaColectivo> {
+export async function create(linea: string, posicionGPS: IPosicionGPS, sentido: string): Promise<IParadaColectivo> {
 
     //CONTROLAR QUE SI EXISTE NO SE CREA DE VUELTAAAAAAAA
     //AGREGAR A  LA POSICION CUANTAS PARADAS LA REFERENCIAN

@@ -10,13 +10,13 @@ import IParadaColectivo = paradaColectivoModel.IParadaColectivo;
 import repositoryLineaColectivo = lineaColectivoModel.repository;
 import repositoryParadasColectivo = paradaColectivoModel.repository;
 
-export async function create(linea: number, paradas: mongoose.Types.ObjectId[]): Promise<ILineaColectivo> {
+export async function create(linea: string, paradas: mongoose.Types.ObjectId[]): Promise<ILineaColectivo> {
 
     return await repositoryLineaColectivo.create({ linea: linea, paradas: paradas, cantidadParadas: paradas.length });
 
 }
 
-export async function getByLinea(linea: number): Promise<ILineaColectivo> {
+export async function getByLinea(linea: string): Promise<ILineaColectivo> {
     return await repositoryLineaColectivo.findOne({ linea: linea }).populate({
         path: 'paradas',
         model: 'ParadaColectivo',

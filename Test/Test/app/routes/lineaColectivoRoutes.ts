@@ -6,7 +6,7 @@ export function obtenerLineasColectivo(req: express.Request, res: express.Respon
 };
 
 export function cargarLineaColectivo(req: express.Request, res: express.Response) {
-    controller.cargarLineaColectivo(req, res);
+    controller.cargarLineasColectivo(req, res);
 };
 
 export function eliminarLineasColectivo(req: express.Request, res: express.Response) {

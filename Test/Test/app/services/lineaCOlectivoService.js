@@ -11,6 +11,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
 const paradaColectivoService = require("./paradaColectivoService");
 const lineaColectivoRepository = require("../repositories/lineaColectivoRepository");
+function cargarLineasColectivo() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let lineas = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
+        lineas.forEach(function (linea) {
+            return __awaiter(this, void 0, void 0, function* () {
+                yield cargarLineaColectivo(linea);
+            });
+        });
+    });
+}
+exports.cargarLineasColectivo = cargarLineasColectivo;
 function cargarLineaColectivo(linea) {
     return __awaiter(this, void 0, void 0, function* () {
         request({
@@ -20,7 +31,7 @@ function cargarLineaColectivo(linea) {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
                     const dataJSON = JSON.parse(body);
-                    let paradasJSON = dataJSON['result']['fArray']; //VER COMO TIPAR EL ARRAY
+                    let paradasJSON = dataJSON['result']['fArray'];
                     let numeroParadas = 0;
                     let posLatitud = 6;
                     let posLongitud = 7;
@@ -28,7 +39,6 @@ function cargarLineaColectivo(linea) {
                     let paradas = [];
                     let nuevaParadaColectivo;
                     while (posLatitud < paradasJSON.length && posLongitud < paradasJSON.length && posSentido < paradasJSON.length) {
-                        //VER POSIBLE ERROR SI PASARA
                         nuevaParadaColectivo = yield paradaColectivoService.crearParadaColectivo(linea, paradasJSON[posLatitud]['fStr'], paradasJSON[posLongitud]['fStr'], paradasJSON[posSentido]['fStr']);
                         paradas.push(nuevaParadaColectivo._id);
                         ++numeroParadas;
@@ -47,7 +57,6 @@ function cargarLineaColectivo(linea) {
         });
     });
 }
-exports.cargarLineaColectivo = cargarLineaColectivo;
 function obtenerLineasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

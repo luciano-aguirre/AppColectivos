@@ -19,19 +19,7 @@ export async function obtenerParadasColectivo(req: express.Request, res: express
         res.status(400).send('Error al obtener las paradas en el controlador');
     }
 }
-/*
-export async function cargarParadasColectivo(req: express.Request, res: express.Response) {
 
-    let linea: number = req.params.linea;
-    try {
-        await paradaColectivoService.cargarParadasColectivo(linea);
-        res.status(200).send('Se cargaron las paradas de la linea ' + linea);
-
-    } catch (error) {
-        res.status(400).send('Error al cargar las paradas de la linea ' + linea);
-    }
-}
-*/
 export async function eliminarParadasColectivo(req: express.Request, res: express.Response) {
 
     let resultado: Boolean = await paradaColectivoService.eliminarParadasColectivos();

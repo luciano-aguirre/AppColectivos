@@ -21,19 +21,6 @@ function obtenerParadasColectivo(req, res) {
     });
 }
 exports.obtenerParadasColectivo = obtenerParadasColectivo;
-/*
-export async function cargarParadasColectivo(req: express.Request, res: express.Response) {
-
-    let linea: number = req.params.linea;
-    try {
-        await paradaColectivoService.cargarParadasColectivo(linea);
-        res.status(200).send('Se cargaron las paradas de la linea ' + linea);
-
-    } catch (error) {
-        res.status(400).send('Error al cargar las paradas de la linea ' + linea);
-    }
-}
-*/
 function eliminarParadasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let resultado = yield paradaColectivoService.eliminarParadasColectivos();

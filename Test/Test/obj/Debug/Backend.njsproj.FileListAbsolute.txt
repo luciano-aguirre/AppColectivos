@@ -1,2 +1,1 @@
-F:\Repositorios\AppColectivos\Test\Test\obj\Debug\Backend.njsprojResolveAssemblyReference.cache
 F:\Repositorios\AppColectivos\Test\Test\bin\Microsoft.NodejsTools.WebRole.dll

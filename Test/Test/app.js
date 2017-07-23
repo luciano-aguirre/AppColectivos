@@ -23,9 +23,9 @@ app.use('/', index_1.default);
 //app.use('/users', users);
 app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
 app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
-app.get('/lineasColectivos', lineaColectivo.obtenerLineasColectivo);
-app.delete('/lineasColectivos', lineaColectivo.eliminarLineasColectivo);
-app.post('/lineasColectivos/:linea', lineaColectivo.cargarLineaColectivo);
+app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
+app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
+app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

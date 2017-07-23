@@ -1,0 +1,2 @@
+F:\Repositorios\TransportePublico\Test\Test\bin\Microsoft.NodejsTools.WebRole.dll
+F:\Repositorios\TransportePublico\Test\Test\obj\Debug\Test.njsprojResolveAssemblyReference.cache

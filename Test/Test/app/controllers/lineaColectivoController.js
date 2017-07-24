@@ -21,28 +21,40 @@ function obtenerLineasColectivo(req, res) {
     });
 }
 exports.obtenerLineasColectivo = obtenerLineasColectivo;
-function cargarLineasColectivo(req, res) {
+function actualizarLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield lineaColectivoService.cargarLineasColectivo();
-            res.status(200).send('Se cargaron todas las lineas de colectivo');
+            yield lineaColectivoService.actualizarLineasColectivo();
+            res.status(200).send('Se actualizaron las lineas de colectivo en la BD');
         }
         catch (error) {
-            res.status(400).send('Error al cargar las lineas de colectivo');
+            res.status(400).send('Error al actualizar las lineas de colectivo de la BD');
+            console.log(error);
         }
     });
 }
-exports.cargarLineasColectivo = cargarLineasColectivo;
-function eliminarLineasColectivo(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let resultado = yield lineaColectivoService.eliminarLineasColectivos();
-        if (resultado) {
-            res.status(200).send('Se eliminaron las lineas de colectivo de la BD');
-        }
-        else {
-            res.status(400).send('No se eliminaron las lineas de colectivo de la BD');
-        }
-    });
+exports.actualizarLineasColectivo = actualizarLineasColectivo;
+/*
+export async function cargarLineasColectivo(req: express.Request, res: express.Response) {
+    
+    try {
+        await lineaColectivoService.cargarLineasColectivo();
+        res.status(200).send('Se cargaron todas las lineas de colectivo');
+
+    } catch (error) {
+        res.status(400).send('Error al cargar las lineas de colectivo');
+    }
 }
-exports.eliminarLineasColectivo = eliminarLineasColectivo;
+*/
+/*
+export async function eliminarLineasColectivo(req: express.Request, res: express.Response) {
+
+    let resultado: Boolean = await lineaColectivoService.eliminarLineasColectivo();
+    if (resultado) {
+        res.status(200).send('Se eliminaron las lineas de colectivo de la BD');
+    } else {
+        res.status(400).send('No se eliminaron las lineas de colectivo de la BD');
+    }
+}
+*/ 
 //# sourceMappingURL=lineaColectivoController.js.map

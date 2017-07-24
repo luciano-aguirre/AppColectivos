@@ -11,6 +11,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
 const paradaColectivoService = require("./paradaColectivoService");
 const lineaColectivoRepository = require("../repositories/lineaColectivoRepository");
+function obtenerLineasColectivo() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let lineas = yield lineaColectivoRepository.getAll();
+            console.log('Se obtuvieron las lineas de colectivo desde el servicio');
+            return lineas;
+        }
+        catch (error) {
+            console.log('Error al obtener las lineas de colectivo desde el servicio');
+            return null;
+        }
+    });
+}
+exports.obtenerLineasColectivo = obtenerLineasColectivo;
+function actualizarLineasColectivo() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield eliminarLineasColectivo();
+        console.log('Se eliminaron las lineas de colectivo de la BD');
+        yield cargarLineasColectivo();
+        console.log('Se guardaron las lineas de colectivo en la BD');
+    });
+}
+exports.actualizarLineasColectivo = actualizarLineasColectivo;
 function cargarLineasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
         let lineas = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
@@ -21,7 +44,6 @@ function cargarLineasColectivo() {
         });
     });
 }
-exports.cargarLineasColectivo = cargarLineasColectivo;
 function cargarLineaColectivo(linea) {
     return __awaiter(this, void 0, void 0, function* () {
         request({
@@ -57,21 +79,7 @@ function cargarLineaColectivo(linea) {
         });
     });
 }
-function obtenerLineasColectivo() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            let lineas = yield lineaColectivoRepository.getAll();
-            console.log('Se obtuvieron las lineas de colectivo desde el servicio');
-            return lineas;
-        }
-        catch (error) {
-            console.log('Error al obtener las lineas de colectivo desde el servicio');
-            return null;
-        }
-    });
-}
-exports.obtenerLineasColectivo = obtenerLineasColectivo;
-function eliminarLineasColectivos() {
+function eliminarLineasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield lineaColectivoRepository.deleteAll();
@@ -85,5 +93,4 @@ function eliminarLineasColectivos() {
         }
     });
 }
-exports.eliminarLineasColectivos = eliminarLineasColectivos;
 //# sourceMappingURL=lineaCOlectivoService.js.map

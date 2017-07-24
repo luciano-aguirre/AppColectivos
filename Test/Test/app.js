@@ -6,8 +6,6 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const index_1 = require("./app/routes/index");
-const posicionGPS = require("./app/routes/posicionGPSRoutes");
-const paradaColectivo = require("./app/routes/paradaColectivoRoutes");
 const lineaColectivo = require("./app/routes/lineaColectivoRoutes");
 mongoose.connect('mongodb://localhost/lineasColectivo');
 var app = express();
@@ -21,11 +19,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', index_1.default);
 //app.use('/users', users);
-app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
-app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
+//app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
+//app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
 app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
-app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
-app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
+app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);
+//app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
+//app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

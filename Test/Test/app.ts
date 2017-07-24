@@ -27,11 +27,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', routes);
 //app.use('/users', users);
 
-app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
-app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
+//app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
+//app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
 app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
-app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
-app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
+app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);
+//app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
+//app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

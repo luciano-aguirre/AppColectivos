@@ -12,9 +12,27 @@ import ILineaColectivo = lineaColectivoModel.ILineaColectivo;
 
 import lineaColectivoRepository = require('../repositories/lineaColectivoRepository');
 
-export async function cargarLineasColectivo() {
+export async function obtenerLineasColectivo(): Promise<ILineaColectivo[]> {
+    try {
+        let lineas: ILineaColectivo[] = await lineaColectivoRepository.getAll();
+        console.log('Se obtuvieron las lineas de colectivo desde el servicio');
+        return lineas;
+    } catch (error) {
+        console.log('Error al obtener las lineas de colectivo desde el servicio');
+        return null;
+    }
+}
+
+export async function actualizarLineasColectivo() {
+    await eliminarLineasColectivo();
+    console.log('Se eliminaron las lineas de colectivo de la BD');
+    await cargarLineasColectivo();
+    console.log('Se guardaron las lineas de colectivo en la BD');
+}
+
+async function cargarLineasColectivo() {
     let lineas: string[] = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
-    
+
     lineas.forEach(async function (linea) {
         await cargarLineaColectivo(linea);
     });
@@ -57,18 +75,7 @@ async function cargarLineaColectivo(linea: string) {
         });
 }
 
-export async function obtenerLineasColectivo(): Promise<ILineaColectivo[]> {
-    try {
-        let lineas: ILineaColectivo[] = await lineaColectivoRepository.getAll();
-        console.log('Se obtuvieron las lineas de colectivo desde el servicio');
-        return lineas;
-    } catch (error) {
-        console.log('Error al obtener las lineas de colectivo desde el servicio');
-        return null;
-    }
-}
-
-export async function eliminarLineasColectivos(): Promise<Boolean> {
+async function eliminarLineasColectivo(): Promise<Boolean> {
     try {
         await lineaColectivoRepository.deleteAll();
         await paradaColectivoService.eliminarParadasColectivos();

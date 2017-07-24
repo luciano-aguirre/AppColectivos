@@ -1,6 +1,5 @@
 ﻿import express = require('express');
 import mongoose = require('mongoose');
-//import bodyParser = require('body-parser');
 
 import lineaColectivoModel = require('../models/lineaColectivoModel');
 import ILineaColectivo = lineaColectivoModel.ILineaColectivo;
@@ -17,6 +16,16 @@ export async function obtenerLineasColectivo(req: express.Request, res: express.
     }
 }
 
+export async function actualizarLineasColectivo(req: express.Request, res: express.Response) {
+    try {
+        await lineaColectivoService.actualizarLineasColectivo();
+        res.status(200).send('Se actualizaron las lineas de colectivo en la BD'); 
+    } catch (error) {
+        res.status(400).send('Error al actualizar las lineas de colectivo de la BD');
+        console.log(error);
+    }
+}
+/*
 export async function cargarLineasColectivo(req: express.Request, res: express.Response) {
     
     try {
@@ -27,13 +36,15 @@ export async function cargarLineasColectivo(req: express.Request, res: express.R
         res.status(400).send('Error al cargar las lineas de colectivo');
     }
 }
-
+*/
+/*
 export async function eliminarLineasColectivo(req: express.Request, res: express.Response) {
 
-    let resultado: Boolean = await lineaColectivoService.eliminarLineasColectivos();
+    let resultado: Boolean = await lineaColectivoService.eliminarLineasColectivo();
     if (resultado) {
         res.status(200).send('Se eliminaron las lineas de colectivo de la BD');
     } else {
         res.status(400).send('No se eliminaron las lineas de colectivo de la BD');
     }
 }
+*/

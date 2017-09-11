@@ -18,9 +18,6 @@ function create(latitud, longitud) {
             if (posicionGPS == null) {
                 posicionGPS = yield repository.create({ latitud: latitud, longitud: longitud });
             }
-            else {
-                console.log('Se reutiliza posicionGPS con ID ' + posicionGPS._id);
-            }
             return posicionGPS;
         }
         catch (error) {
@@ -30,10 +27,9 @@ function create(latitud, longitud) {
     });
 }
 exports.create = create;
-function obtenerPosicionGPS(_id) {
+function obtenerPosicionGPS(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        let nuevaPosicionGPS = yield repository.findById(_id).exec();
-        return nuevaPosicionGPS;
+        return yield repository.findById(id).exec();
     });
 }
 exports.obtenerPosicionGPS = obtenerPosicionGPS;

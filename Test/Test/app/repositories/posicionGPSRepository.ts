@@ -12,9 +12,6 @@ export async function create(latitud: number, longitud: number): Promise<IPosici
         if (posicionGPS == null) {
             posicionGPS = await repository.create({ latitud: latitud, longitud: longitud });
         }
-        else {
-            console.log('Se reutiliza posicionGPS con ID ' + posicionGPS._id);
-        }
         return posicionGPS;
     } catch (error) {
         console.log('No se pudo crear una posicion en el repositorio');
@@ -22,11 +19,9 @@ export async function create(latitud: number, longitud: number): Promise<IPosici
     }
 }
 
-export async function obtenerPosicionGPS(_id: string): Promise<IPosicionGPS>{
+export async function obtenerPosicionGPS(id: mongoose.Types.ObjectId): Promise<IPosicionGPS>{
 
-    let nuevaPosicionGPS: IPosicionGPS = await repository.findById(_id).exec();
-
-    return nuevaPosicionGPS;
+    return await repository.findById(id).exec();
 }
 
 export async function getAll(): Promise<IPosicionGPS[]> {

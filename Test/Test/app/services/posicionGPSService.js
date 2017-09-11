@@ -17,6 +17,12 @@ function crearPosicionGPS(latitud, longitud) {
     });
 }
 exports.crearPosicionGPS = crearPosicionGPS;
+function obtenerPosicionGPS(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield posicionGPSRepository.obtenerPosicionGPS(id);
+    });
+}
+exports.obtenerPosicionGPS = obtenerPosicionGPS;
 function obtenerPosicionesGPS() {
     return __awaiter(this, void 0, void 0, function* () {
         return yield posicionGPSRepository.getAll();

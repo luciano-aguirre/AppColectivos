@@ -11,33 +11,31 @@ import repositoryLineaColectivo = lineaColectivoModel.repository;
 import repositoryParadasColectivo = paradaColectivoModel.repository;
 
 export async function create(linea: string, paradas: mongoose.Types.ObjectId[]): Promise<ILineaColectivo> {
-
     return await repositoryLineaColectivo.create({ linea: linea, paradas: paradas, cantidadParadas: paradas.length });
-
 }
 
-export async function getByLinea(linea: string): Promise<ILineaColectivo> {
-    return await repositoryLineaColectivo.findOne({ linea: linea }).populate({
+export async function getByLinea(linea: String): Promise<ILineaColectivo> {
+    return await repositoryLineaColectivo.findOne({ linea: linea }).exec();/*.populate({
         path: 'paradas',
         model: 'ParadaColectivo',
         populate: {
             path: 'posicion_id',
             model: 'PosicionGPS'
         }
-    }).exec();
+    }).exec();*/
 }
 
 export async function getAll(): Promise<ILineaColectivo[]> {
     //http://techqa.info/programming/question/32174803/mongoose-two-level-population-using-keystonejs
 
-    return await repositoryLineaColectivo.find({}).populate({
+    return await repositoryLineaColectivo.find({}).exec();/*.populate({
         path: 'paradas',
         model: 'ParadaColectivo',
         populate: {
             path: 'posicion_id',
             model: 'PosicionGPS'
         }
-    }).exec();
+    }).exec();*/
 }
 
 

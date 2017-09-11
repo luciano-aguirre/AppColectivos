@@ -11,16 +11,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lineaColectivoService = require("../services/lineaCOlectivoService");
 function obtenerLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let lineas = yield lineaColectivoService.obtenerLineasColectivo();
-        if (lineas != null) {
+        try {
+            let lineas = yield lineaColectivoService.obtenerLineasColectivo();
             res.status(200).json(lineas);
         }
-        else {
-            res.status(400).send('Error al obtener las paradas en el controlador');
+        catch (error) {
+            res.status(400).send('Error al obtener las lineas de colectivo');
+            console.log(error);
         }
     });
 }
 exports.obtenerLineasColectivo = obtenerLineasColectivo;
+function obtenerLineaColectivo(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let nroLinea = req.params.linea;
+            let linea = yield lineaColectivoService.obtenerLineaColectivo(nroLinea);
+            res.status(200).json(linea);
+        }
+        catch (error) {
+            res.status(400).send('Error al obtener la linea de colectivo');
+            console.log(error);
+        }
+    });
+}
+exports.obtenerLineaColectivo = obtenerLineaColectivo;
 function actualizarLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

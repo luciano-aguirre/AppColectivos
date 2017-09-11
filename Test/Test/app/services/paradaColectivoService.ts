@@ -1,4 +1,5 @@
 ﻿import express = require('express');
+import mongoose = require('mongoose');
 
 import posicionGPSService = require('./posicionGPSService');
 import posicionGPSModel = require('../models/posicionGPSModel');
@@ -13,6 +14,10 @@ export async function crearParadaColectivo(linea: string, latitud: number, longi
     let posicionGPS: IPosicionGPS = await posicionGPSService.crearPosicionGPS(latitud, longitud);
     let parada: IParadaColectivo = await paradaColectivoRepository.create(linea, posicionGPS, sentido);
     return parada;
+}
+
+export async function obtenerParadaColectivo(id: mongoose.Types.ObjectId): Promise<IParadaColectivo> {
+    return await paradaColectivoRepository.obtenerParadaColectivo(id);
 }
 
 export async function obtenerParadasColectivo(): Promise<IParadaColectivo[]> {

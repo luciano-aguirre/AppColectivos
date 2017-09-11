@@ -1,13 +1,16 @@
 ﻿import bodyParser = require('body-parser');
 import debug = require('debug');
 import express = require('express');
-import path = require('path');
+import http = require('http');
 import mongoose = require('mongoose');
+import path = require('path');
 
 import routes from './app/routes/index';
+
 import posicionGPS = require('./app/routes/posicionGPSRoutes');
 import paradaColectivo = require('./app/routes/paradaColectivoRoutes');
 import lineaColectivo = require('./app/routes/lineaColectivoRoutes');
+import procesoTraslado = require('./app/routes/procesoTrasladoRoutes');
 
 mongoose.connect('mongodb://localhost/lineasColectivo');
 
@@ -30,7 +33,10 @@ app.use('/', routes);
 //app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
 //app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
 app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
+app.get('/lineasColectivo/:linea', lineaColectivo.obtenerLineaColectivo);
 app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);
+//USAR POST O GET
+app.post('/calcularTrayecto', procesoTraslado.calcularTrayecto);
 //app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
 //app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 

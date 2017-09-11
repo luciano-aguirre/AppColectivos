@@ -18,23 +18,30 @@ function create(linea, posicionGPS, sentido) {
     });
 }
 exports.create = create;
-function obtenerParadaColectivo(_id) {
-    let nuevaParada;
-    repository.findById(_id, (error, parada) => {
-        if (error) {
-            console.log('Error al recuperar una posicion por su id');
-        }
-        nuevaParada = parada;
+function obtenerParadaColectivo(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // let nuevaParada: IParadaColectivo;
+        return yield repository.findById(id).exec(); /*.populate({
+            path: 'posicion_id',
+            model: 'PosicionGPS'
+        }).exec();*/
+        /*
+        repository.findById(_id, (error, parada) => {
+            if (error) {
+                console.log('Error al recuperar una posicion por su id');
+            }
+            nuevaParada = parada;
+        });
+        return nuevaParada;*/
     });
-    return nuevaParada;
 }
 exports.obtenerParadaColectivo = obtenerParadaColectivo;
 function getAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield repository.find({}).populate({
+        return yield repository.find({}).exec(); /*.populate({
             path: 'posicion_id',
             model: 'PosicionGPS'
-        }).exec();
+        }).exec();*/
     });
 }
 exports.getAll = getAll;

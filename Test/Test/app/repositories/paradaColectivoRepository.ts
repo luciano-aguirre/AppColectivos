@@ -12,28 +12,32 @@ export async function create(linea: string, posicionGPS: IPosicionGPS, sentido: 
 
     //CONTROLAR QUE SI EXISTE NO SE CREA DE VUELTAAAAAAAA
     //AGREGAR A  LA POSICION CUANTAS PARADAS LA REFERENCIAN
-
     return await repository.create({ linea: linea, posicion_id: posicionGPS._id, sentido: sentido });
 }
 
-export function obtenerParadaColectivo(_id: string): IParadaColectivo {
+export async function obtenerParadaColectivo(id: mongoose.Types.ObjectId): Promise<IParadaColectivo> {
 
-    let nuevaParada: IParadaColectivo;
+   // let nuevaParada: IParadaColectivo;
+    return await repository.findById(id).exec();/*.populate({
+        path: 'posicion_id',
+        model: 'PosicionGPS'
+    }).exec();*/
+    /*
     repository.findById(_id, (error, parada) => {
         if (error) {
             console.log('Error al recuperar una posicion por su id');
         }
         nuevaParada = parada;
     });
-    return nuevaParada;
+    return nuevaParada;*/
 }
 
 export async function getAll(): Promise<IParadaColectivo[]> {
 
-    return await repository.find({}).populate({
+    return await repository.find({}).exec();/*.populate({
         path: 'posicion_id',
         model: 'PosicionGPS'
-    }).exec();
+    }).exec();*/
 }
 
 export async function deleteAll(): Promise<Boolean> {

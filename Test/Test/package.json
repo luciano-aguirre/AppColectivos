@@ -12,13 +12,15 @@
   "main": "app.js",
   "dependencies": {
     "@types/body-parser": "^1.16.4",
-    "@types/mongoose": "^4.7.19",
-    "@types/request": "^2.0.0",
+    "@types/bson": "^1.0.3",
+    "@types/googlemaps": "^3.26.20",
+    "@types/mongoose": "^4.7.20",
     "body-parser": "^1.17.2",
+    "bson": "^1.0.4",
     "debug": "^2.2.0",
-    "express": "^4.14.0",
+    "express": "^4.15.4",
     "mongoose": "4.10.8",
-    "pug": "^2.0.0-beta6",
-    "request": "^2.81.0"
+    "pug": "^2.0.0-rc.3",
+    "requisition": "^1.7.0"
   }
 }

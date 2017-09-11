@@ -48,6 +48,9 @@
     <TypeScriptCompile Include="app\controllers\lineaColectivoController.ts" />
     <TypeScriptCompile Include="app\controllers\paradaColectivoController.ts" />
     <TypeScriptCompile Include="app\controllers\posicionGPSController.ts" />
+    <TypeScriptCompile Include="app\controllers\procesoTrasladoController.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="app\models\lineaColectivoModel.ts" />
     <TypeScriptCompile Include="app\models\paradaColectivoModel.ts" />
     <TypeScriptCompile Include="app\models\posicionGPSModel.ts" />
@@ -58,10 +61,15 @@
     <TypeScriptCompile Include="app\routes\lineaColectivoRoutes.ts" />
     <TypeScriptCompile Include="app\routes\paradaColectivoRoutes.ts" />
     <TypeScriptCompile Include="app\routes\posicionGPSRoutes.ts" />
-    <TypeScriptCompile Include="app\routes\user.ts" />
+    <TypeScriptCompile Include="app\routes\procesoTrasladoRoutes.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="app\services\lineaColectivoService.ts" />
     <TypeScriptCompile Include="app\services\paradaColectivoService.ts" />
     <TypeScriptCompile Include="app\services\posicionGPSService.ts" />
+    <TypeScriptCompile Include="app\services\procesoTrasladoService.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="typings\globals\debug\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\express\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\express-serve-static-core\index.d.ts" />

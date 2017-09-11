@@ -18,28 +18,28 @@ function create(linea, paradas) {
 exports.create = create;
 function getByLinea(linea) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield repositoryLineaColectivo.findOne({ linea: linea }).populate({
+        return yield repositoryLineaColectivo.findOne({ linea: linea }).exec(); /*.populate({
             path: 'paradas',
             model: 'ParadaColectivo',
             populate: {
                 path: 'posicion_id',
                 model: 'PosicionGPS'
             }
-        }).exec();
+        }).exec();*/
     });
 }
 exports.getByLinea = getByLinea;
 function getAll() {
     return __awaiter(this, void 0, void 0, function* () {
         //http://techqa.info/programming/question/32174803/mongoose-two-level-population-using-keystonejs
-        return yield repositoryLineaColectivo.find({}).populate({
+        return yield repositoryLineaColectivo.find({}).exec(); /*.populate({
             path: 'paradas',
             model: 'ParadaColectivo',
             populate: {
                 path: 'posicion_id',
                 model: 'PosicionGPS'
             }
-        }).exec();
+        }).exec();*/
     });
 }
 exports.getAll = getAll;

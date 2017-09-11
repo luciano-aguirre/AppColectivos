@@ -18,6 +18,12 @@ function crearParadaColectivo(linea, latitud, longitud, sentido) {
     });
 }
 exports.crearParadaColectivo = crearParadaColectivo;
+function obtenerParadaColectivo(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield paradaColectivoRepository.obtenerParadaColectivo(id);
+    });
+}
+exports.obtenerParadaColectivo = obtenerParadaColectivo;
 function obtenerParadasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

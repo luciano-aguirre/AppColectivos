@@ -9,6 +9,10 @@ export async function actualizarLineasColectivo(req: express.Request, res: expre
     await controller.actualizarLineasColectivo(req, res);
 }
 
+export async function obtenerLineaColectivo(req: express.Request, res: express.Response) {
+    await controller.obtenerLineaColectivo(req, res);
+}
+
 /*
 export function cargarLineaColectivo(req: express.Request, res: express.Response) {
     controller.cargarLineasColectivo(req, res);

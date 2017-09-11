@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const debug = require("debug");
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
+const path = require("path");
 const index_1 = require("./app/routes/index");
 const lineaColectivo = require("./app/routes/lineaColectivoRoutes");
+const procesoTraslado = require("./app/routes/procesoTrasladoRoutes");
 mongoose.connect('mongodb://localhost/lineasColectivo');
 var app = express();
 // view engine setup
@@ -22,7 +23,10 @@ app.use('/', index_1.default);
 //app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
 //app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
 app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
+app.get('/lineasColectivo/:linea', lineaColectivo.obtenerLineaColectivo);
 app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);
+//USAR POST O GET
+app.post('/calcularTrayecto', procesoTraslado.calcularTrayecto);
 //app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
 //app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 // catch 404 and forward to error handler

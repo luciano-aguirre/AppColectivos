@@ -22,6 +22,12 @@ function actualizarLineasColectivo(req, res) {
     });
 }
 exports.actualizarLineasColectivo = actualizarLineasColectivo;
+function obtenerLineaColectivo(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield controller.obtenerLineaColectivo(req, res);
+    });
+}
+exports.obtenerLineaColectivo = obtenerLineaColectivo;
 /*
 export function cargarLineaColectivo(req: express.Request, res: express.Response) {
     controller.cargarLineasColectivo(req, res);

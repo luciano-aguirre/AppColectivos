@@ -27,6 +27,7 @@ app.get('/lineasColectivo/:linea', lineaColectivo.obtenerLineaColectivo);
 app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);
 //USAR POST O GET
 app.post('/calcularTrayecto', procesoTraslado.calcularTrayecto);
+app.get('/test', procesoTraslado.conexionServidor);
 //app.delete('/lineasColectivo', lineaColectivo.eliminarLineasColectivo);
 //app.post('/lineasColectivo', lineaColectivo.cargarLineaColectivo);
 // catch 404 and forward to error handler

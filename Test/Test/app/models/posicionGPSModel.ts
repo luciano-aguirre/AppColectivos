@@ -12,4 +12,12 @@ export interface IPosicionGPS extends mongoose.Document {
 }
 //VER CUANDO USAR Number o number
 
+export enum TipoPunto { foot = 0, bus = 1 };
+
+export interface IPuntoTrayecto {
+    latitude: Number,
+    longitude: Number,
+    mode: TipoPunto
+}
+
 export var repository = mongoose.model<IPosicionGPS>('PosicionGPS', posicionGPSSchema);

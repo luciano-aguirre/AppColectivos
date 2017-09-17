@@ -16,4 +16,8 @@ function calcularTrayecto(req, res) {
 }
 exports.calcularTrayecto = calcularTrayecto;
 ;
+function conexionServidor(req, res) {
+    controller.conexionServer(req, res);
+}
+exports.conexionServidor = conexionServidor;
 //# sourceMappingURL=procesoTrasladoRoutes.js.map

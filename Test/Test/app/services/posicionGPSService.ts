@@ -26,3 +26,4 @@ export async function eliminarPosicionesGPS(): Promise<Boolean> {
    
     return await posicionGPSRepository.deleteAll();
 }
+

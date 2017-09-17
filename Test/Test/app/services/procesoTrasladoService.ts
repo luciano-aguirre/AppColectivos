@@ -4,6 +4,8 @@ var req = require('requisition');
 
 import posicionGPSModel = require('../models/posicionGPSModel');
 import IPosicionGPS = posicionGPSModel.IPosicionGPS;
+import IPuntoTrayecto = posicionGPSModel.IPuntoTrayecto;
+import ModoTrayecto = posicionGPSModel.TipoPunto;
 
 import paradaColectivoModel = require('../models/paradaColectivoModel');
 import IParadaColectivo = paradaColectivoModel.IParadaColectivo;
@@ -66,34 +68,110 @@ async function paradasMasCercanas(linea: ILineaColectivo, origen: IPosicionGPS, 
     return [resOrigen[0], resDestino[0], resOrigen[1] + resDestino[1]];
 }
 
+export async function armarTrayectoAPie(origen: IPosicionGPS, destino: IPosicionGPS): Promise<IPuntoTrayecto[]> {
+    let trayecto: IPuntoTrayecto[] = [];
 
-export async function calcularTrayecto(origen: IPosicionGPS, destino: IPosicionGPS): Promise<[string,IParadaColectivo,IParadaColectivo,number]> {
+    const res = await req('http://192.168.230.129:5000/route/v1/foot/' + origen.longitud + ',' + origen.latitud + ';' + destino.longitud + ',' + destino.latitud + '?steps=true');
+    const dataJSON = await res.json();
 
+    let steps = dataJSON['routes'][0]['legs'][0]['steps'];
+
+    for (let i: number = 0; i < steps.length; i++) {
+        let punto = {} as IPuntoTrayecto;
+        punto.latitude = steps[i]['maneuver']['location'][1],
+        punto.longitude = steps[i]['maneuver']['location'][0]
+        punto.mode = ModoTrayecto.foot;
+        trayecto.push(punto);
+    }
+    
+    return trayecto;
+}
+
+export async function armarTrayectoColectivo(linea: string, posicionInicial: IPuntoTrayecto, paradaOrigen: IParadaColectivo, posicionFinal: IPuntoTrayecto, paradaDestino: IParadaColectivo): Promise<IPuntoTrayecto[]> {
+    let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(linea);
+    let trayecto: IPuntoTrayecto[] = [];
+    let parada: IParadaColectivo;
+    let posicionParada: IPosicionGPS;
+
+    let i: number = 0;
+    let seguir: boolean = true;   
+    let punto; 
+
+    while (seguir) {
+        parada = await paradaColectivoService.obtenerParadaColectivo(lineaColectivo.paradas[i]);
+        seguir = !parada.equals(paradaOrigen);
+        i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
+      /*  if (parada.equals(paradaOrigen)) {
+            seguir = false;
+        }
+        else {
+            i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
+        }*/
+    }
+    //Agrego la posicion de origen como inicio para que coincidan bien los recorridos, idem posicion de destino
+   /* punto = {} as IPuntoTrayecto;
+    punto.latitude = posicionOrigen.latitud;
+    punto.longitude = posicionOrigen.longitud;
+    punto.mode = ModoTrayecto.foot;*/
+    trayecto.push(posicionInicial);
+    
+    seguir = true;
+    while (seguir){
+        parada = await paradaColectivoService.obtenerParadaColectivo(lineaColectivo.paradas[i]);        
+        posicionParada = await posicionGPSService.obtenerPosicionGPS(parada.posicion_id);
+        if (parada.equals(paradaDestino)) {
+            seguir = false;
+        }
+        //seguir = !parada.equals(paradaOrigen);
+        else {
+            punto = {} as IPuntoTrayecto;
+            punto.latitude = posicionParada.latitud;
+            punto.longitude = posicionParada.longitud;
+            punto.mode = ModoTrayecto.bus;
+            trayecto.push(punto);
+            i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
+        }       
+    }
+/*
+    punto = {} as IPuntoTrayecto;
+    punto.latitude = posicionDestino.latitud;
+    punto.longitude = posicionDestino.longitud;
+    punto.mode = ModoTrayecto.foot;*/
+    trayecto.push(posicionFinal);   
+
+    return trayecto;
+}
+
+
+//export async function calcularTrayecto(origen: IPosicionGPS, destino: IPosicionGPS): Promise<[string,IParadaColectivo,IParadaColectivo,number]> {
+export async function calcularTrayecto(origen: IPosicionGPS, destino: IPosicionGPS): Promise<[IPuntoTrayecto[], IPuntoTrayecto[], IPuntoTrayecto[]]> {
     let res: [string,IParadaColectivo, IParadaColectivo, number] = ["",null, null, -1];
  
     let lineas: ILineaColectivo[] = await lineaColectivoService.obtenerLineasColectivo();
 
-    for (let i: number = 0; i < lineas.length; i++) {
-        let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(lineas[i].linea);
+   // for (let i: number = 0; i < lineas.length; i++) {
+    for (let i: number = 0; i < 1; i++) {
+     //   let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(lineas[i].linea);
+        let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo("503");
         let resLinea: [IParadaColectivo, IParadaColectivo, number] = await paradasMasCercanas(lineaColectivo, origen, destino);
       //  let calculoOrigen: [IParadaColectivo, number] = await paradaMasCercana(lineaColectivo, origen);
       //  let calculoDestino: [IParadaColectivo, number] = await paradaMasCercana(lineaColectivo, destino);
       //  let distanciaCaminada: number = calculoOrigen[1] + calculoDestino[1];
 
         if (res[3] == -1 || resLinea[2] < res[3]) {
-            res = [lineas[i].linea.valueOf(), resLinea[0], resLinea[1], resLinea[2]];
+            //res = [lineas[i].linea.valueOf(), resLinea[0], resLinea[1], resLinea[2]];
+            res = ["503", resLinea[0], resLinea[1], resLinea[2]];
         }
       //  res = ["503", calculoOrigen[0], calculoDestino[0], distanciaCaminada];
     }
     let posicionParadaOrigen: IPosicionGPS = await posicionGPSService.obtenerPosicionGPS(res[1].posicion_id);
+    let trayectoHaciaParadaOrigen: IPuntoTrayecto[] = await armarTrayectoAPie(origen, posicionParadaOrigen); 
+    
     let posicionParadaDestino: IPosicionGPS = await posicionGPSService.obtenerPosicionGPS(res[2].posicion_id);
-    return res;
-}
+    let trayectoHaciaDestino: IPuntoTrayecto[] = await armarTrayectoAPie(posicionParadaDestino, destino);
 
-export async function calcularLimites(): Promise<IPosicionGPS[]> {
-    let limites: IPosicionGPS[];
+    let trayectoColectivo: IPuntoTrayecto[] = await armarTrayectoColectivo(res[0], trayectoHaciaParadaOrigen[trayectoHaciaParadaOrigen.length - 1], res[1], trayectoHaciaDestino[0], res[2]);
 
-        
-    return limites;
-
+    return [trayectoHaciaParadaOrigen, trayectoColectivo, trayectoHaciaDestino];
+    //return res;
 }

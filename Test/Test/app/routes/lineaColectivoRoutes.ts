@@ -1,6 +1,10 @@
 ﻿import express = require('express');
 import controller = require("../controllers/lineaColectivoController");
 
+export async function obtenerNumerosLineasColectivo(req: express.Request, res: express.Response) {
+    await controller.obtenerNumerosLineasColectivo(req, res);
+}
+
 export async function obtenerLineasColectivo(req: express.Request, res: express.Response) {
     await controller.obtenerLineasColectivo(req, res);
 };

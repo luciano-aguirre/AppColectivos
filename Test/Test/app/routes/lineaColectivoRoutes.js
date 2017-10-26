@@ -9,6 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const controller = require("../controllers/lineaColectivoController");
+function obtenerNumerosLineasColectivo(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield controller.obtenerNumerosLineasColectivo(req, res);
+    });
+}
+exports.obtenerNumerosLineasColectivo = obtenerNumerosLineasColectivo;
 function obtenerLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield controller.obtenerLineasColectivo(req, res);

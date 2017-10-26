@@ -16,6 +16,12 @@ function create(linea, paradas) {
     });
 }
 exports.create = create;
+function getNumerosLinea() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield repositoryLineaColectivo.find({}, { linea: 1 }).exec();
+    });
+}
+exports.getNumerosLinea = getNumerosLinea;
 function getByLinea(linea) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield repositoryLineaColectivo.findOne({ linea: linea }).exec(); /*.populate({
@@ -29,6 +35,19 @@ function getByLinea(linea) {
     });
 }
 exports.getByLinea = getByLinea;
+function getByLineaPopulated(linea) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield repositoryLineaColectivo.findOne({ linea: linea }).populate({
+            path: 'paradas',
+            model: 'ParadaColectivo',
+            populate: {
+                path: 'posicion_id',
+                model: 'PosicionGPS'
+            }
+        }).exec();
+    });
+}
+exports.getByLineaPopulated = getByLineaPopulated;
 function getAll() {
     return __awaiter(this, void 0, void 0, function* () {
         //http://techqa.info/programming/question/32174803/mongoose-two-level-population-using-keystonejs

@@ -14,6 +14,10 @@ export async function create(linea: string, paradas: mongoose.Types.ObjectId[]):
     return await repositoryLineaColectivo.create({ linea: linea, paradas: paradas, cantidadParadas: paradas.length });
 }
 
+export async function getNumerosLinea(): Promise<ILineaColectivo[]> {
+    return await repositoryLineaColectivo.find({}, { linea: 1 }).exec();
+}
+
 export async function getByLinea(linea: String): Promise<ILineaColectivo> {
     return await repositoryLineaColectivo.findOne({ linea: linea }).exec();/*.populate({
         path: 'paradas',
@@ -23,6 +27,17 @@ export async function getByLinea(linea: String): Promise<ILineaColectivo> {
             model: 'PosicionGPS'
         }
     }).exec();*/
+}
+
+export async function getByLineaPopulated(linea: String): Promise<ILineaColectivo> {
+    return await repositoryLineaColectivo.findOne({ linea: linea }).populate({
+        path: 'paradas',
+        model: 'ParadaColectivo',
+        populate: {
+            path: 'posicion_id',
+            model: 'PosicionGPS'
+        }
+    }).exec();
 }
 
 export async function getAll(): Promise<ILineaColectivo[]> {

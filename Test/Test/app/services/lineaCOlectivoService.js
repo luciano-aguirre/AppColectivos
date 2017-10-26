@@ -11,6 +11,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var req = require('requisition');
 const paradaColectivoService = require("./paradaColectivoService");
 const lineaColectivoRepository = require("../repositories/lineaColectivoRepository");
+function obtenerNumeroLineas() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let lineasColectivo = yield lineaColectivoRepository.getNumerosLinea();
+        let numerosLinea = [];
+        for (let i = 0; i < lineasColectivo.length; i++) {
+            numerosLinea.push(lineasColectivo[i].linea);
+        }
+        return numerosLinea.sort((linea1, linea2) => {
+            if (linea1.length < linea2.length) {
+                return -1;
+            }
+            else if (linea1.length > linea2.length) {
+                return 1;
+            }
+            else {
+                let nroLinea1 = parseInt(linea1.toString());
+                let nroLinea2 = parseInt(linea2.toString());
+                return nroLinea1 - nroLinea2;
+            }
+        });
+    });
+}
+exports.obtenerNumeroLineas = obtenerNumeroLineas;
 function obtenerLineasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
         return yield lineaColectivoRepository.getAll();
@@ -19,7 +42,7 @@ function obtenerLineasColectivo() {
 exports.obtenerLineasColectivo = obtenerLineasColectivo;
 function obtenerLineaColectivo(linea) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield lineaColectivoRepository.getByLinea(linea);
+        return yield lineaColectivoRepository.getByLineaPopulated(linea);
     });
 }
 exports.obtenerLineaColectivo = obtenerLineaColectivo;
@@ -32,7 +55,7 @@ function actualizarLineasColectivo() {
 exports.actualizarLineasColectivo = actualizarLineasColectivo;
 function cargarLineasColectivo() {
     return __awaiter(this, void 0, void 0, function* () {
-        let lineas = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
+        let lineas = ['500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
         for (let i = 0; i < lineas.length; i++) {
             yield cargarLineaColectivo(lineas[i]);
         }

@@ -5,6 +5,17 @@ import ILineaColectivo = lineaColectivoModel.ILineaColectivo;
 
 import lineaColectivoService = require('../services/lineaCOlectivoService');
 
+export async function obtenerNumerosLineasColectivo(req: express.Request, res: express.Response) {
+    try {
+        let lineas: String[] = await lineaColectivoService.obtenerNumeroLineas();
+        res.status(200).json(lineas);
+        console.log("Se devolvieron los numeros de linea");
+    } catch (error) {
+        res.status(400).send("Error al obtener los numeros de lineas de colectivo");
+        console.log(error);
+    }
+}
+
 export async function obtenerLineasColectivo(req: express.Request, res: express.Response) {
     try {
         let lineas: ILineaColectivo[] = await lineaColectivoService.obtenerLineasColectivo();
@@ -20,6 +31,7 @@ export async function obtenerLineaColectivo(req: express.Request, res: express.R
         let nroLinea: string = req.params.linea;
         let linea: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(nroLinea);
         res.status(200).json(linea);
+        console.log("Se obtuvieron las paradas de la linea " + nroLinea);
     } catch (error) {
         res.status(400).send('Error al obtener la linea de colectivo');
         console.log(error);

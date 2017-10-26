@@ -12,12 +12,35 @@ import ILineaColectivo = lineaColectivoModel.ILineaColectivo;
 
 import lineaColectivoRepository = require('../repositories/lineaColectivoRepository');
 
+export async function obtenerNumeroLineas(): Promise<String[]> {
+    let lineasColectivo: ILineaColectivo[] = await lineaColectivoRepository.getNumerosLinea();
+    let numerosLinea: String[] = [];
+
+    for (let i: number = 0; i < lineasColectivo.length; i++) {
+        numerosLinea.push(lineasColectivo[i].linea);
+    }
+
+    return numerosLinea.sort((linea1, linea2) => {
+        if (linea1.length < linea2.length) {
+            return -1;
+        }
+        else if (linea1.length > linea2.length) {
+            return 1;
+        }
+        else {
+            let nroLinea1: number = parseInt(linea1.toString());
+            let nroLinea2: number = parseInt(linea2.toString());
+            return nroLinea1 - nroLinea2;
+        }
+    });
+}
+
 export async function obtenerLineasColectivo(): Promise<ILineaColectivo[]> {
-        return await lineaColectivoRepository.getAll();
+    return await lineaColectivoRepository.getAll();
 }
 
 export async function obtenerLineaColectivo(linea: String): Promise<ILineaColectivo> {
-    return await lineaColectivoRepository.getByLinea(linea);
+    return await lineaColectivoRepository.getByLineaPopulated(linea);
 }
 
 export async function actualizarLineasColectivo(): Promise<void> {
@@ -26,7 +49,7 @@ export async function actualizarLineasColectivo(): Promise<void> {
 }
 
 async function cargarLineasColectivo(): Promise<void> {
-    let lineas: string[] = ['319', '500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
+    let lineas: string[] = ['500', '502', '503', '504', '505', '506', '507', '509', '512', '513', '514', '516', '517', '518', '519', '519 a'];
 
     for (let i: number = 0; i < lineas.length; i++) {
         await cargarLineaColectivo(lineas[i]);

@@ -51,6 +51,9 @@
     <TypeScriptCompile Include="app\controllers\procesoTrasladoController.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="app\models\caminoModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="app\models\lineaColectivoModel.ts" />
     <TypeScriptCompile Include="app\models\paradaColectivoModel.ts" />
     <TypeScriptCompile Include="app\models\posicionGPSModel.ts" />

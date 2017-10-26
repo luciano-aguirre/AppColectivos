@@ -9,6 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lineaColectivoService = require("../services/lineaCOlectivoService");
+function obtenerNumerosLineasColectivo(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let lineas = yield lineaColectivoService.obtenerNumeroLineas();
+            res.status(200).json(lineas);
+            console.log("Se devolvieron los numeros de linea");
+        }
+        catch (error) {
+            res.status(400).send("Error al obtener los numeros de lineas de colectivo");
+            console.log(error);
+        }
+    });
+}
+exports.obtenerNumerosLineasColectivo = obtenerNumerosLineasColectivo;
 function obtenerLineasColectivo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -28,6 +42,7 @@ function obtenerLineaColectivo(req, res) {
             let nroLinea = req.params.linea;
             let linea = yield lineaColectivoService.obtenerLineaColectivo(nroLinea);
             res.status(200).json(linea);
+            console.log("Se obtuvieron las paradas de la linea " + nroLinea);
         }
         catch (error) {
             res.status(400).send('Error al obtener la linea de colectivo');

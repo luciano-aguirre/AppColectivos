@@ -32,6 +32,7 @@ app.use('/', routes);
 
 //app.get('/posicionesGPS', posicionGPS.obtenerPosicionesGPS);
 //app.get('/paradasColectivo', paradaColectivo.obtenerParadasColectivo);
+app.get("/numerosLineasColectivo", lineaColectivo.obtenerNumerosLineasColectivo);
 app.get('/lineasColectivo', lineaColectivo.obtenerLineasColectivo);
 app.get('/lineasColectivo/:linea', lineaColectivo.obtenerLineaColectivo);
 app.post('/actualizarLineasColectivo', lineaColectivo.actualizarLineasColectivo);

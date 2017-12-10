@@ -13,44 +13,7 @@ const posicionGPSService = require("../services/posicionGPSService");
 const paradaColectivoService = require("../services/paradaColectivoService");
 const lineaColectivoService = require("../services/lineaColectivoService");
 function calcularDistancia(origen, destino) {
-    return __awaiter(this, void 0, void 0, function* () {
-        /* const res = await req('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + origen.latitud + ',' + origen.longitud + '&destinations=' + destino.latitud + ',' + destino.longitud + '&mode=walking&key=AIzaSyAa1HcCYyNcWztCG9e6O83cgGg6tpHic_w');
-         const dataJSON = await res.json();
-         return dataJSON['rows'][0]['elements'][0]['distance']['value'];*/
-        const res = yield req('http://192.168.230.129:5000/route/v1/foot/' + origen.longitud + ',' + origen.latitud + ';' + destino.longitud + ',' + destino.latitud);
-        const dataJSON = yield res.json();
-        let distancia = dataJSON['routes'][0]['distance'];
-        return Math.round(distancia);
-    });
-}
-/*
-async function paradaMasCercana(linea: ILineaColectivo, posicion: IPosicionGPS): Promise<[IParadaColectivo,number]> {
-    let res: [IParadaColectivo, number] = [null, -1];
-
-    for (let i: number = 0; i < linea.cantidadParadas; i++) {
-        let parada: IParadaColectivo = await paradaColectivoService.obtenerParadaColectivo(linea.paradas[i]);
-        let posicionParada: IPosicionGPS = await posicionGPSService.obtenerPosicionGPS(parada.posicion_id);
-        let distanciaParada: number = await calcularDistancia(posicion, posicionParada);
-        if (res[0] == null || distanciaParada < res[1]) {
-            res = [parada, distanciaParada];
-        }
-    }
-
-    return res;
-}*/
-function paradasRadioCercano(radio, posicion) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let paradas = yield paradaColectivoService.obtenerParadasColectivo();
-        let paradasCercanas = [];
-        let posicionGPSParada;
-        for (let i = 0; i < paradas.length; i++) {
-            posicionGPSParada = yield posicionGPSService.obtenerPosicionGPS(paradas[i].posicion_id);
-            if (getDistanceFromLatLonInKm(posicion.latitud.valueOf(), posicion.longitud.valueOf(), posicionGPSParada.latitud.valueOf(), posicionGPSParada.longitud.valueOf()) <= radio) {
-                paradasCercanas.push(paradas[i]);
-            }
-        }
-        return paradasCercanas;
-    });
+    return getDistanceFromLatLonInKm(origen.latitud.valueOf(), origen.longitud.valueOf(), destino.latitud.valueOf(), destino.longitud.valueOf());
 }
 function paradasMasCercanasIdaVuelta(linea, origen, destino) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -64,21 +27,21 @@ function paradasMasCercanasIdaVuelta(linea, origen, destino) {
             let parada = yield paradaColectivoService.obtenerParadaColectivo(linea.paradas[i]);
             let posicionParada = yield posicionGPSService.obtenerPosicionGPS(parada.posicion_id);
             if (parada.sentido == 'i') {
-                let distanciaParadaOrigenIda = yield calcularDistancia(origen, posicionParada);
+                let distanciaParadaOrigenIda = calcularDistancia(origen, posicionParada); //await calcularDistanciaCaminando(origen, posicionParada);
                 if (paradaCercanaOrigenIda[0] == null || distanciaParadaOrigenIda < paradaCercanaOrigenIda[1]) {
                     paradaCercanaOrigenIda = [parada, distanciaParadaOrigenIda];
                 }
-                let distanciaParadaDestinoIda = yield calcularDistancia(posicionParada, destino);
+                let distanciaParadaDestinoIda = calcularDistancia(posicionParada, destino); //await calcularDistanciaCaminando(posicionParada, destino);
                 if (paradaCercanaDestinoIda[0] == null || distanciaParadaDestinoIda < paradaCercanaDestinoIda[1]) {
                     paradaCercanaDestinoIda = [parada, distanciaParadaDestinoIda];
                 }
             }
             else {
-                let distanciaParadaOrigenVuelta = yield calcularDistancia(origen, posicionParada);
+                let distanciaParadaOrigenVuelta = calcularDistancia(origen, posicionParada); //await calcularDistanciaCaminando(origen, posicionParada);
                 if (paradaCercanaOrigenVuelta[0] == null || distanciaParadaOrigenVuelta < paradaCercanaOrigenVuelta[1]) {
                     paradaCercanaOrigenVuelta = [parada, distanciaParadaOrigenVuelta];
                 }
-                let distanciaParadaDestinoVuelta = yield calcularDistancia(posicionParada, destino);
+                let distanciaParadaDestinoVuelta = calcularDistancia(posicionParada, destino); //await calcularDistanciaCaminando(posicionParada, destino);
                 if (paradaCercanaDestinoVuelta[0] == null || distanciaParadaDestinoVuelta < paradaCercanaDestinoVuelta[1]) {
                     paradaCercanaDestinoVuelta = [parada, distanciaParadaDestinoVuelta];
                 }
@@ -87,25 +50,6 @@ function paradasMasCercanasIdaVuelta(linea, origen, destino) {
         paradasCercanasOrigen.push(paradaCercanaOrigenIda[0], paradaCercanaOrigenVuelta[0]);
         paradasCercanasDestino.push(paradaCercanaDestinoIda[0], paradaCercanaDestinoVuelta[0]);
         return [paradasCercanasOrigen, paradasCercanasDestino]; //SEGUIR VIENDO PARA ARMAR LOS CAMINOS
-    });
-}
-function paradasMasCercanas(linea, origen, destino) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let resOrigen = [null, -1];
-        let resDestino = [null, -1];
-        for (let i = 0; i < linea.cantidadParadas; i++) {
-            let parada = yield paradaColectivoService.obtenerParadaColectivo(linea.paradas[i]);
-            let posicionParada = yield posicionGPSService.obtenerPosicionGPS(parada.posicion_id);
-            let distanciaParadaOrigen = yield calcularDistancia(origen, posicionParada);
-            if (resOrigen[0] == null || distanciaParadaOrigen < resOrigen[1]) {
-                resOrigen = [parada, distanciaParadaOrigen];
-            }
-            let distanciaParadaDestino = yield calcularDistancia(destino, posicionParada);
-            if (resDestino[0] == null || distanciaParadaDestino < resDestino[1]) {
-                resDestino = [parada, distanciaParadaDestino];
-            }
-        }
-        return [resOrigen[0], resDestino[0], resOrigen[1] + resDestino[1]];
     });
 }
 function armarTrayectoAPie(origen, destino) {
@@ -195,9 +139,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                 punto = {};
                 punto.latitude = posicionGPSParadaActual.latitud;
                 punto.longitude = posicionGPSParadaActual.longitud;
+                //armarTrayectoEntreParadas(trayecto, punto);
                 if (distanciaCercana(trayecto.coordenadas, punto)) {
                     trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                     trayecto.coordenadas.push(punto);
+                }
+                else {
+                    trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                 }
                 posParadaActual++;
             }
@@ -208,9 +156,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                     punto = {};
                     punto.latitude = posicionGPSParadaActual.latitud;
                     punto.longitude = posicionGPSParadaActual.longitud;
+                    //armarTrayectoEntreParadas(trayecto, punto);
                     if (distanciaCercana(trayecto.coordenadas, punto)) {
                         trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                         trayecto.coordenadas.push(punto);
+                    }
+                    else {
+                        trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                     }
                     posParadaActual--;
                 }
@@ -222,9 +174,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                 punto = {};
                 punto.latitude = posicionGPSParadaActual.latitud;
                 punto.longitude = posicionGPSParadaActual.longitud;
+                //armarTrayectoEntreParadas(trayecto, punto);
                 if (distanciaCercana(trayecto.coordenadas, punto)) {
                     trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                     trayecto.coordenadas.push(punto);
+                }
+                else {
+                    trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                 }
                 posParadaActual--;
             }
@@ -235,9 +191,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                     punto = {};
                     punto.latitude = posicionGPSParadaActual.latitud;
                     punto.longitude = posicionGPSParadaActual.longitud;
+                    //armarTrayectoEntreParadas(trayecto, punto);
                     if (distanciaCercana(trayecto.coordenadas, punto)) {
                         trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                         trayecto.coordenadas.push(punto);
+                    }
+                    else {
+                        trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                     }
                     posParadaActual++;
                 }
@@ -249,9 +209,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                 punto = {};
                 punto.latitude = posicionGPSParadaActual.latitud;
                 punto.longitude = posicionGPSParadaActual.longitud;
+                //armarTrayectoEntreParadas(trayecto, punto);
                 if (distanciaCercana(trayecto.coordenadas, punto)) {
                     trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                     trayecto.coordenadas.push(punto);
+                }
+                else {
+                    trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                 }
                 posParadaActual++;
             }
@@ -262,9 +226,13 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
                 punto = {};
                 punto.latitude = posicionGPSParadaActual.latitud;
                 punto.longitude = posicionGPSParadaActual.longitud;
+                //armarTrayectoEntreParadas(trayecto, punto);
                 if (distanciaCercana(trayecto.coordenadas, punto)) {
                     trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() + distanciaUltimaParada(trayecto.coordenadas, punto);
                     trayecto.coordenadas.push(punto);
+                }
+                else {
+                    trayecto.distanciaTrayecto = trayecto.distanciaTrayecto.valueOf() * 10;
                 }
                 posParadaActual--;
             }
@@ -274,93 +242,17 @@ function armarTrayectoColectivo(linea, posicionInicial, paradaOrigen, posicionFi
         return trayecto;
     });
 }
-exports.armarTrayectoColectivo = armarTrayectoColectivo;
-/*
-export async function armarTrayectoColectivo(linea: string, posicionInicial: IPuntoTrayecto, paradaOrigen: IParadaColectivo, posicionFinal: IPuntoTrayecto, paradaDestino: IParadaColectivo): Promise<IPuntoTrayecto[]> {
-    let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(linea);
-    let trayecto: IPuntoTrayecto[] = [];
-    let parada: IParadaColectivo;
-    let posicionParada: IPosicionGPS;
-
-    let i: number = 0;
-    let posOrigen: number;
-    let posDestino: number;
-    let seguir: boolean = true;
-    let punto;
-
-    while (seguir) {
-        parada = await paradaColectivoService.obtenerParadaColectivo(lineaColectivo.paradas[i]);
-        seguir = !parada.equals(paradaOrigen);
-        i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
-      //  if (parada.equals(paradaOrigen)) {
-       //     seguir = false;
-       // }
-       // else {
-       //     i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
-       // }
-    }
-    //Agrego la posicion de origen como inicio para que coincidan bien los recorridos, idem posicion de destino
-  // punto = {} as IPuntoTrayecto;
-  //  punto.latitude = posicionOrigen.latitud;
-  //  punto.longitude = posicionOrigen.longitud;
-  //  punto.mode = ModoTrayecto.foot;
-    trayecto.push(posicionInicial);
-    
-    seguir = true;
-    while (seguir){
-        parada = await paradaColectivoService.obtenerParadaColectivo(lineaColectivo.paradas[i]);
-        posicionParada = await posicionGPSService.obtenerPosicionGPS(parada.posicion_id);
-        if (parada.equals(paradaDestino)) {
-            seguir = false;
-        }
-        //seguir = !parada.equals(paradaOrigen);
-        else {
-            punto = {} as IPuntoTrayecto;
-            punto.latitude = posicionParada.latitud;
-            punto.longitude = posicionParada.longitud;
-            punto.mode = ModoTrayecto.bus;
-            trayecto.push(punto);
-            i = (i + 1) % lineaColectivo.cantidadParadas.valueOf();
-        }
-    }
-
- //  punto = {} as IPuntoTrayecto;
- //   punto.latitude = posicionDestino.latitud;
- //   punto.longitude = posicionDestino.longitud;
- //   punto.mode = ModoTrayecto.foot;
-    trayecto.push(posicionFinal);
-
-    return trayecto;
-}
-*/
-//export async function calcularTrayecto(origen: IPosicionGPS, destino: IPosicionGPS): Promise<[string,IParadaColectivo,IParadaColectivo,number]> {
 function calcularTrayecto(origen, destino) {
     return __awaiter(this, void 0, void 0, function* () {
         let res = ["", null, null, -1];
-        // paradasRadioCercano(1.0, origen);
         let caminos = [];
         let caminoActual;
         let mejorCamino;
         let paradasCercanas;
-        let lineas = yield lineaColectivoService.obtenerLineasColectivo();
         let numeroLineas = yield lineaColectivoService.obtenerNumeroLineas();
-        // for (let i: number = 0; i < lineas.length; i++) {
-        /*  for (let i: number = 0; i < 1; i++) {
-           //   let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo(lineas[i].linea);
-              let lineaColectivo: ILineaColectivo = await lineaColectivoService.obtenerLineaColectivo("503");
-              let resLinea: [IParadaColectivo, IParadaColectivo, number] = await paradasMasCercanas(lineaColectivo, origen, destino);
-            //  let calculoOrigen: [IParadaColectivo, number] = await paradaMasCercana(lineaColectivo, origen);
-            //  let calculoDestino: [IParadaColectivo, number] = await paradaMasCercana(lineaColectivo, destino);
-              //  let distanciaCaminada: number = calculoOrigen[1] + calculoDestino[1];
-              
-              if (res[3] == -1 || resLinea[2] < res[3]) {
-                  //res = [lineas[i].linea.valueOf(), resLinea[0], resLinea[1], resLinea[2]];
-                  res = ["503", resLinea[0], resLinea[1], resLinea[2]];
-              }
-            //  res = ["503", calculoOrigen[0], calculoDestino[0], distanciaCaminada];
-          }*/
-        for (let i = 0; i < 3; i++) {
-            let lineaColectivo = yield lineaColectivoService.obtenerLineaColectivo(numeroLineas[i]);
+        let lineaColectivo;
+        for (let i = 0; i < numeroLineas.length; i++) {
+            lineaColectivo = yield lineaColectivoService.obtenerLineaColectivo(numeroLineas[i]);
             paradasCercanas = yield paradasMasCercanasIdaVuelta(lineaColectivo, origen, destino);
             mejorCamino = null;
             for (let j = 0; j < paradasCercanas[0].length; j++) {
@@ -371,6 +263,10 @@ function calcularTrayecto(origen, destino) {
                     let trayectoHaciaDestino = yield armarTrayectoAPie(posicionParadaDestino, destino);
                     let trayectoColectivo = yield armarTrayectoColectivo(lineaColectivo.linea.valueOf(), trayectoHaciaParadaOrigen.coordenadas[trayectoHaciaParadaOrigen.coordenadas.length - 1], paradasCercanas[0][j], trayectoHaciaDestino.coordenadas[0], paradasCercanas[1][k]);
                     if (trayectoColectivo.distanciaTrayecto.valueOf() > 0) {
+                        if (trayectoColectivo.distanciaTrayecto.valueOf() < 700) {
+                            //Penalizacion para que no tenga en cuenta viajes en colectivo de menos de 7 cuadras
+                            trayectoColectivo.distanciaTrayecto = trayectoColectivo.distanciaTrayecto.valueOf() * 10;
+                        }
                         caminoActual = {};
                         caminoActual.trayectos = [];
                         caminoActual.puntaje = (trayectoHaciaParadaOrigen.distanciaTrayecto.valueOf() + trayectoHaciaDestino.distanciaTrayecto.valueOf()) * 2 + trayectoColectivo.distanciaTrayecto.valueOf() * 0.5;
@@ -383,12 +279,13 @@ function calcularTrayecto(origen, destino) {
                 }
             }
             if (mejorCamino != null) {
+                //await arreglarTrayectoColectivo(mejorCamino);
                 caminos.push(mejorCamino);
             }
         }
         return caminos.sort((camino1, camino2) => {
             return camino1.puntaje.valueOf() - camino2.puntaje.valueOf();
-        });
+        }).slice(0, 3);
     });
 }
 exports.calcularTrayecto = calcularTrayecto;
